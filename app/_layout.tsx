@@ -6,6 +6,7 @@ export default function Layout() {
     <SafeAreaView
       style={{
         height: "100%",
+         padding: 20 
 
       }}
     >

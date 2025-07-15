@@ -16,46 +16,49 @@ export const tasks: Task[] = [
   { id: 6, text: 'Task 6', category: 'TBU' },
 ];
 
-const TaskComponent = ({
-  task,
-  onChangeText,
-  onDelete,
-  onEditTask,
-}: {
+export const TaskComponent: React.FC<{
   task: Task;
-  onChangeText: (text: string) => void;
-  onDelete: () => void;
+  sectionIndex?: number;
+  taskIndex?: number;
   onEditTask: (newTaskText: string) => void;
+  onDeleteTask: () => void;
+  onTextChange?: (newText: string) => void;
+}> = ({
+  task,
+  sectionIndex,
+  taskIndex,
+  onEditTask,
+  onDeleteTask,
+  onTextChange,
 }) => {
-  const [editing, setEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [newTaskText, setNewTaskText] = useState(task.text);
 
   const handleEditTask = () => {
     onEditTask(newTaskText);
-    setEditing(false);
+    setIsEditing(false);
   };
 
   return (
-    <View>
-      {editing ? (
+    <View style={{ padding: 10 }}>
+      {isEditing ? (
         <TextInput
           value={newTaskText}
           onChangeText={(text) => setNewTaskText(text)}
-          placeholder="New task text"
+          onSubmitEditing={handleEditTask}
         />
       ) : (
-        <Text>{task.text}</Text>
+        <Text style={{ fontSize: 16 }}>
+          {task.text}
+        </Text>
       )}
-      {editing ? (
-        <Button title="Save" onPress={handleEditTask} />
-      ) : (
-        <Button title="Edit" onPress={() => setEditing(true)} />
-      )}
-      <Button title="Delete" onPress={onDelete} />
+      <View style={{ flexDirection: 'row' }}>
+        <Button title="Edit" onPress={() => setIsEditing(true)} />
+        <Button title="Delete" onPress={onDeleteTask} />
+      </View>
     </View>
   );
 };
-
 export const CategoryComponent = ({
   category,
   tasks,
@@ -80,7 +83,7 @@ export const CategoryComponent = ({
   };
 
   return (
-    <View>
+    <View style={{ padding: 10 }}>
       {editing ? (
         <TextInput
           value={newCategoryName}
@@ -88,7 +91,7 @@ export const CategoryComponent = ({
           placeholder="New category name"
         />
       ) : (
-        <Text>{category}</Text>
+        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{category}</Text>
       )}
       {editing ? (
         <Button title="Save" onPress={handleEditCategory} />
@@ -96,15 +99,16 @@ export const CategoryComponent = ({
         <Button title="Edit" onPress={() => setEditing(true)} />
       )}
       <Button title="Delete" onPress={onDeleteCategory} />
+      
       <FlatList
         data={tasks}
         renderItem={({ item }) => (
           <TaskComponent
-            task={item}
-            onChangeText={(newText) => console.log(newText)}
-            onDelete={() => console.log("Task deleted")}
-            onEditTask={(newTaskText) => console.log("Task edited:", newTaskText)}
-          />
+  task={item}
+  onTextChange={(newText) => console.log(newText)}
+  onDeleteTask={() => console.log("Task deleted")}
+  onEditTask={(newTaskText) => console.log("Task edited:", newTaskText)}
+/>
         )}
       />
     </View>

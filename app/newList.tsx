@@ -15,9 +15,10 @@ export default function NewList() {
   };
 
   return (
-    <SafeAreaView>
-      <Text>Add New List</Text>
+    <SafeAreaView style={{ padding: 20 }}>
+      <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Add New List</Text>
       <TextInput
+      style={{ marginBottom: 10 }}
         value={newListName}
         onChangeText={(text) => setNewListName(text)}
         placeholder="Enter new list name"
